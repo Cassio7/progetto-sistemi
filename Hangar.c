@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -18,25 +19,26 @@ void stampevent(char *processo){
 }
 
 int main() {
+  int status;
   stampevent("Hangar: ");
   printf("Creazione del processo Hangar\n");
   pid_t pid[10];
 
   stampevent("Hangar: ");
   printf("Inizio creazione di ogni aereo\n");
-  for (int i = 1; i <= 10; i++) {
-    pid[i] = fork();
-    sleep(2);
+  for (int i = 0; i < 10; i++) { //for per la creazione degl'aerei
+    pid[i] = fork(); //creazione del figlio
     if (pid[i]<0)
       fprintf(stderr, "Fork fallito\n");
     else if (pid[i] == 0) {
       pid[i]= getpid();
-      child(pid[i],i);
+      child(pid[i],i+1);
       exit(0);
     }
+    sleep(2);
   }
-  for (int i = 1; i <= 10; i++) {
-    wait(NULL);
+  for (int i = 0; i < 10; i++) {
+    wait(&status);
   }
   stampevent("Hangar: ");
   printf("Fine creazione di ogni aereo\n");

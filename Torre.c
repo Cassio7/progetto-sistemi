@@ -6,7 +6,7 @@
 #include <errno.h>
 #include <stdbool.h>
 
-bool pista_1=false,pista_2=false;
+bool pista1=false,pista2=false;
 
 void torre() {
 

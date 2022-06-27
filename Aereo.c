@@ -11,14 +11,10 @@ struct aereo {
   int numero;
 };
 
+void stampevent(char*);
+
 int rangerand(int min, int max){
-  static int bSeed = 0;
-  if(!bSeed) {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    srandom(tv.tv_usec % 1000);
-    bSeed = 1;
-  }
+  srand(time(NULL));
   return (random() % (max - min +1)) + min;
 }
 
@@ -30,6 +26,20 @@ void child(pid_t pid,int i){
   printf("Aereo numero = %d, id = %d\n",aereo.numero,aereo.id );
   int r = rangerand(3,8);
   stampevent("Aereo: ");
-  printf("Inizio preparazione Aereo numero ) %d, durata = %d\n",aereo.numero,r);
+  printf("Inizio preparazione Aereo numero = %d, durata = %d\n",aereo.numero,r);
   sleep(r);
+  //invio segnale per verificare disponibilità
+  stampevent("Aereo: ");
+  printf("Avvenuto invio alla Torre richiesta decollo da Aereo numero = %d\n",aereo.numero);
+  //risposta Torre
+  //inizio decollo
+  r = rangerand(5,15);
+  stampevent("Aereo: ");
+  printf("Decollo Aereo numero = %d, durata volo = %d\n",aereo.numero,r);
+  sleep(r);
+  //fine volo
+  stampevent("Aereo: ");
+  printf("Arrivato Aereo numero = %d\n",aereo.numero);
+  //liberare pista
+
 }
