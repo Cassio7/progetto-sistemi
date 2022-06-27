@@ -40,5 +40,6 @@ int main() {
   }
   stampevent("Hangar: ");
   printf("Fine creazione di ogni aereo\n");
+  
   return 0;
 }
