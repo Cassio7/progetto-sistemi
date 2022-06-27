@@ -28,7 +28,7 @@ int main() {
     pid[i] = fork();
     sleep(2);
     if (pid[i]<0)
-      fprintf(stderr, "Fork fallito come me\n");
+      fprintf(stderr, "Fork fallito\n");
     else if (pid[i] == 0) {
       pid[i]= getpid();
       child(pid[i],i);
@@ -40,6 +40,7 @@ int main() {
   }
   stampevent("Hangar: ");
   printf("Fine creazione di ogni aereo\n");
-  
+  stampevent("Hangar: ");
+  printf("Fine processo Hangar\n");
   return 0;
 }
