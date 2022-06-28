@@ -8,13 +8,21 @@
 #include <time.h>
 #include <stdbool.h>
 #include <fcntl.h>
+#include <signal.h>
 
 struct aereo {
   int id;
   int numero;
 };
 
-void stampevent(char *processo){
+static char end[10] = "\033[0m\n";
+
+/*struct coda{
+  struct aereo* aereo;
+  struct pila* next;
+};*/
+
+static void stampevent(char *processo){
   char s[256];
   time_t timet;
   time(&timet);

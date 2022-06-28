@@ -25,7 +25,8 @@ void child(pid_t pid,int i){
   }
   stampevent("Aereo: ");
   printf("Avvenuto invio alla Torre richiesta decollo da Aereo numero = %d\n",aereo.numero);
-  //risposta Torre
+  pause();
+  //aspettare segnale per partire risposta Torre
   //inizio decollo
   r = rangerand(5,15);
   stampevent("Aereo: ");
