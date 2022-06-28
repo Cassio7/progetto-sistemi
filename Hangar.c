@@ -1,28 +1,14 @@
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <time.h>
+#include "def.h"
+
 
 void child(pid_t,int);
-
-void stampevent(char *processo){
-  char s[256];
-  time_t timet;
-  time(&timet);
-  struct tm *pTm = localtime(&timet);
-  sprintf(s, "%02d:%02d:%02d", pTm->tm_hour, pTm->tm_min, pTm->tm_sec);
-  printf("%s %s",s,processo);
-}
 
 int main() {
   int status;
   stampevent("Hangar: ");
   printf("Creazione del processo Hangar\n");
   pid_t pid[10];
+  mkfifo("/tmp/myfifo", S_IRWXU);
 
   stampevent("Hangar: ");
   printf("Inizio creazione di ogni aereo\n");
@@ -44,5 +30,6 @@ int main() {
   printf("Fine creazione di ogni aereo\n");
   stampevent("Hangar: ");
   printf("Fine processo Hangar\n");
+  unlink("/tmp/myfifo");
   return 0;
 }
