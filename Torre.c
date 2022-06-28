@@ -1,36 +1,70 @@
 #include "def.h"
 
 
-bool pista1=false,pista2=false; //false = disponibile, true = non disponibile
-int coda[10];
+static bool pista1=false,pista2=false; //false = disponibile, true = non disponibile
 struct aereo aereo;
+char Torre[30] = "\033[1;35mTorre: ";
 
 int main() {
-  int i = 0;
-  stampevent("Torre: ");
-  printf("Avvio del processo Torre\n");
-  int fd = open("/tmp/myfifo", O_RDONLY);
-  if(read(fd, &aereo, sizeof(aereo)) == -1) {
-    perror("Parent: Errore in read");
-    return 1;
+  int i = 0,pidT = getpid();
+  sigset_t sigset;
+  int signum = 0;
+  sigemptyset(&sigset);
+  sigaddset(&sigset, SIGRTMIN + 1);
+  sigaddset(&sigset, SIGRTMIN + 2);
+  sigaddset(&sigset, SIGRTMIN + 3);
+  sigprocmask(SIG_BLOCK, &sigset, NULL);
+
+  stampevent(Torre);
+  printf("Avvio del processo Torre%s",end);
+  int fd = open("/tmp/myfifo", O_RDWR);
+  if(write(fd, &pidT, sizeof(pidT)) == -1) {
+    perror("Torre: Errore in write");
+    exit(1);
   }
-  coda[i] = aereo.id;
-  stampevent("Torre: ");
-  printf("Richiesta di decollo da Aereo numero = %d\n",aereo.numero);
-  if (!pista1) {
-    stampevent("Torre: ");
-    printf("Autorizzazione al decollo Aereo numero = %d, da pista1\n",aereo.numero);
-    pista1 = true;
-    kill(aereo.id,SIGALRM);
-  }
-  else if (!pista2) {
-    stampevent("Torre: ");
-    printf("Autorizzazione al decollo Aereo numero = %d, da pista2\n",aereo.numero);
-    pista2 = true;
-  }
-  else {
-    //no disponibilità quindi wait?
-  }
+  do {
+    if(read(fd, &aereo, sizeof(aereo)) == -1) {
+      perror("Torre: Errore in read");
+      return 1;
+    }
+    stampevent(Torre);
+    printf("Richiesta di decollo da Aereo numero = %d%s",aereo.numero,end);
+    i++; //conta gli aerei 
+    if (!pista1) {
+      stampevent(Torre);
+      printf("Autorizzazione al decollo Aereo numero = %d, da pista 1%s",aereo.numero,end);
+      pista1 = true;
+      kill(aereo.id,SIGRTMIN + 1);
+    }
+    else if (!pista2) {
+      stampevent(Torre);
+      printf("Autorizzazione al decollo Aereo numero = %d, da pista 2%s",aereo.numero,end);
+      pista2 = true;
+      kill(aereo.id,SIGRTMIN + 2);
+    }
+    else {
+      sigwait(&sigset,&signum);
+      if (signum == 35){
+          pista1 = false;
+          printf("liberata pista 1\n");
+          stampevent(Torre);
+          printf("Autorizzazione al decollo Aereo numero = %d, da pista 1%s",aereo.numero,end);
+          pista1 = true;
+          kill(aereo.id,SIGRTMIN + 1);
+      }
+      else if(signum == 36){
+          printf("liberata pista 2\n");
+          pista2 = false;
+          stampevent(Torre);
+          printf("Autorizzazione al decollo Aereo numero = %d, da pista 2%s",aereo.numero,end);
+          pista2 = true;
+          kill(aereo.id,SIGRTMIN + 2);
+      }
+    }
+  }while(i != 10);
+  do {
+      sigwait(&sigset,&signum);
+  } while(signum != 37);
 
   close(fd);
   return 0;

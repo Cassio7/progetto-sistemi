@@ -22,6 +22,7 @@ static char end[10] = "\033[0m\n";
   struct pila* next;
 };*/
 
+
 static void stampevent(char *processo){
   char s[256];
   time_t timet;
