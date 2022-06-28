@@ -46,10 +46,6 @@ int child(pid_t pid,int i,int pidT){
   //fine volo
   stampevent(Aereo);
   printf("Fine decollo Aereo numero = %d%s",aereo.numero,end);
-  /*if(read(fd, &pidT, sizeof(pidT)) == -1) {
-    perror("Aereo: Errore in read");
-    return 1;
-  }*/
   kill(pidT,signum);
   //liberare pista
   close(fd);

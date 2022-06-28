@@ -33,10 +33,11 @@ int main() {
   }
   stampevent(Hangar);
   printf("Fine creazione di ogni aereo%s",end);
+  unlink("/tmp/myfifo");
+  stampevent(Hangar);
+  printf("Non ci sono piu' Aerei da far decollare, invio segnale a Torre%s",end);
+  kill(pidT,SIGRTMIN + 3);
   stampevent(Hangar);
   printf("Fine processo Hangar%s",end);
-  //get pid torre
-  unlink("/tmp/myfifo");
-  kill(pidT,SIGRTMIN + 3);
   return 0;
 }
