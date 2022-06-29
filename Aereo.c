@@ -2,8 +2,14 @@
 
 
 int rangerand(int min, int max){
-  srand(time(NULL));
-  return (random() % (max - min +1)) + min;
+    static int bSeed = 0;
+    if(!bSeed) {
+      struct timeval tv;
+      gettimeofday(&tv, NULL);
+      srandom(tv.tv_usec % 1000);
+      bSeed = 1;
+    }
+  return (random() % (max - min + 1)) + min;
 }
 
 int child(pid_t pid,int i,int pidT){

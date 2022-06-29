@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <sys/time.h>
 
 //\033 escape sequence
 #define END "\033[0m\n" //[0m torna normale
@@ -16,7 +17,6 @@
 #define AEREO "Aereo: "
 #define AEREOCOL "\033[1;31mAereo: "//[1;34 = grassetto e rosso
 #define TORRE "\033[1;35mTorre: "//[1;34 = grassetto e viola
-
 
 struct aereo { //struttura aereo id = pid processo aereo, numero = da 1 a 10
   int id;
