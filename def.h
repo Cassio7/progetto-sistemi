@@ -10,19 +10,20 @@
 #include <fcntl.h>
 #include <signal.h>
 
-struct aereo {
+//\033 escape sequence
+#define END "\033[0m\n" //[0m torna normale
+#define HANGAR "\033[1;34mHangar: "//[1;34 = grassetto e blu
+#define AEREO "Aereo: "
+#define AEREOCOL "\033[1;31mAereo: "//[1;34 = grassetto e rosso
+#define TORRE "\033[1;35mTorre: "//[1;34 = grassetto e viola
+
+
+struct aereo { //struttura aereo id = pid processo aereo, numero = da 1 a 10
   int id;
   int numero;
 };
 
-static char end[10] = "\033[0m\n";
-
-/*struct coda{
-  struct aereo* aereo;
-  struct pila* next;
-};*/
-
-
+//permette di stampare orario ad ogni azione di ogni processo
 static void stampevent(char *processo){
   char s[256];
   time_t timet;
