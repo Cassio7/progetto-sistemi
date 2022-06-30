@@ -1,1 +1,1 @@
-Eseguire il file start.sh 
+# Eseguire il file start.sh 
