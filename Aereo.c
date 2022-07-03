@@ -44,6 +44,7 @@ int child(pid_t pid,int i,int pidT){ //prendo pid aereo, numero aereo, pidT = pi
     perror("Aereo: Errore in write");
     return 1;
   }
+  close(fd); //chiudo pipe
   stampevent(AEREO);
   printf("Avvenuto invio alla Torre richiesta decollo da Aereo numero = %d%s",aereo.numero,END);
   sigwait(&sigset,&signum);//aspetta segnale per partire risposta Torre
@@ -58,6 +59,5 @@ int child(pid_t pid,int i,int pidT){ //prendo pid aereo, numero aereo, pidT = pi
   //mando un segnale a torre tramite pidT, signum = SIGRTMIN + 1 or 2 in base alla pista usata
   //e libero la pista
   kill(pidT,signum);
-  close(fd); //chiudo pipe
   return 0;
 }

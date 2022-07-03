@@ -18,7 +18,10 @@ int main() {
     perror("HANGAR: Errore in read");
     return 1;
   }
+  printf("--------HANGAR: READ FATTA %d----------\n",pidT);
   close(fd);
+  kill(pidT,SIGRTMIN + 3); //sblocca torre dallo wait per evitare di inviare il pid alla read sotto in torre 
+
   //do while per inserimento numero aerei che va da 10 a 20 compresi
   do {
     stampevent(HANGAR);
@@ -37,6 +40,8 @@ int main() {
     perror("HANGAR: Errore in write");
     return 1;
   }
+  printf("--------HANGAR: WRITE FATTA %d----------\n",numaer);
+  close(fd);//chiudo pipe
   stampevent(HANGAR);
   printf("Inizio creazione di ogni aereo%s",END);
   for (int i = 0; i < numaer; i++) { //for per la creazione degl'aerei
@@ -55,7 +60,6 @@ int main() {
   }
   stampevent(HANGAR);
   printf("Fine creazione di ogni aereo%s",END);
-  close(fd);//chiudo pipe
   unlink("/tmp/myfifo");//rimuovo la pipe
   stampevent(HANGAR);
   printf("Non ci sono piu' Aerei da far decollare, invio segnale a Torre%s",END);
