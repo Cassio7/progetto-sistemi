@@ -44,7 +44,6 @@ int main() {
     perror("Torre: Errore in write");
     exit(1);
   }
-  printf("--------TORRE: WRITE FATTA %d----------\n",pidT);
   close(fd); //chiudo pipe per non inviare il pid alla read sotto
   sigwait(&sigset,&signum);//uso pure una wait per lo stesso motivo sopra
 
@@ -58,7 +57,6 @@ int main() {
     perror("Torre: Errore in read");
     exit(1);
   }
-  printf("--------TORRE: READ FATTA %d----------\n",numaer);
   //ciclo for principale finisce quando i=numaer aerei
   for(int i = 0; i < numaer;i++){
     if(read(fd, &aereo, sizeof(aereo)) == -1) { //riceve da pipe dati aereo
